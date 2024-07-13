@@ -88,3 +88,9 @@ body {
 .ant-form-item-explain-error {
   font-size: 3vw !important;
 }
+
+.ant-modal-content {
+  width: 60vw !important;
+  background: rgb(15,106,162) !important;
+background: linear-gradient(90deg, rgba(15,106,162,1) 25%, rgba(96,161,203,1) 81%) !important;
+}
