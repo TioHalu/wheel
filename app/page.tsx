@@ -1,13 +1,14 @@
-import {Suspense} from "react";
+import { Suspense } from "react";
 import dynamic from "next/dynamic";
 
-const Component = dynamic(() => import("./pages/component"), {
+
+const Component = dynamic(() => import("./feature/component"), {
   ssr: false,
-})
+});
 export default function Page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-    <Component />
+      <Component />
     </Suspense>
-  )
+  );
 }

@@ -31,3 +31,60 @@ body {
     text-wrap: balance;
   }
 }
+
+.bhdLno {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.rcp-root {
+  max-width: none !important;
+  max-height: none !important;
+}
+.rcp-saturation {
+  height: 20vw !important;
+}
+
+.rcp-fields-floor{
+  height: 10vw !important;
+}
+ .rcp-field-input {
+  height: 10vw !important;
+  font-size: 5vw !important;
+ }
+
+.ant-color-picker-color-block {
+  width: 10vw !important;
+  height: 8vw !important;
+  
+}
+.ant-color-picker-inner-content {
+  width: 50vw !important; 
+  height: 35vw !important;
+}
+.ant-color-picker-color-block-inner {
+  width: 10vw !important;
+}
+.ant-color-picker-palette {
+  height: 5vw !important;
+}
+.ant-color-picker-trigger-text {
+  font-size: 5vw !important;
+}
+
+.ant-color-picker-input .ant-input {
+  height: 10vw !important;
+  font-size: 5vw !important;
+} 
+
+.ant-color-picker-input .ant-select-selection-item {
+  font-size: 5vw !important;
+}
+
+.ant-color-picker-status-error {
+  border-width: 0.4vw !important;
+}
+
+.ant-form-item-explain-error {
+  font-size: 3vw !important;
+}

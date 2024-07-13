@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
     "antd": "^5.19.1",
     "next": "14.2.5",
     "react": "^18",
+    "react-color-palette": "^7.2.1",
     "react-custom-roulette": "^1.4.1",
     "react-dom": "^18"
   },
