@@ -141,7 +141,7 @@ const WheelPage = () => {
           level={2}
           style={{ fontSize: "5vw", color: "white" }}
         >
-          "{data[prizeNumber]?.option}"
+          {data[prizeNumber]?.option}
         </Typography.Title>
         <Typography.Title
           level={3}
