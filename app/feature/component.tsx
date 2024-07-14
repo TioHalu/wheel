@@ -1,16 +1,11 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Wheel } from "@/public/dist/components/Wheel/index";
 import { App, ConfigProvider, Button, Modal, Typography } from "antd";
 import { useRouter } from "next/navigation";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import Image from "next/image";
-// const data = [
-//   { option: "0", style: { backgroundColor: "green", textColor: "black" } },
-//   { option: "1", style: { backgroundColor: "white" } },
-//   { option: "2" },
-// ];
 
 const WheelPage = () => {
   const { width, height } = useWindowSize();
@@ -18,53 +13,56 @@ const WheelPage = () => {
   const [prizeNumber, setPrizeNumber] = useState(0);
   const [click, setClick] = useState(0);
   const [open, setOpen] = useState(false);
+  const [tipe, setTipe] = useState<any>("1");
+  const [flag, setFlag] = useState<any>(false);
+  
+  
   const [data, setData] = useState<any>([
     {
       option: "MOBIL INOVA",
-      style: { backgroundColor: "#E0202A", textColor: "white" },
-      weight: 3,
+      weight: 30,
       stock: 1,
     },
     {
       option: "MOTOR",
-      style: { backgroundColor: "#0F6AA2", textColor: "white" },
-      weight: 1,
+      weight: 20,
       stock: 1,
     },
     {
       option: "MANDALIKA",
-      style: { backgroundColor: "#E0202A", textColor: "white" },
-      weight: 2,
+      weight: 100,
       stock: 1,
     },
     {
       option: "INGGRIS",
-      style: { backgroundColor: "#0F6AA2", textColor: "white" },
-      weight: 5,
+      weight: 50,
       stock: 1,
     },
     {
       option: "JEPANG",
-      style: { backgroundColor: "#E0202A", textColor: "white" },
-      weight: 9,
+      weight: 90,
       stock: 1,
     },
     {
       option: "SPANYOL",
-      style: { backgroundColor: "#0F6AA2", textColor: "white" },
       weight: 10,
       stock: 1,
+      style:null
     },
   ]);
+
   let spinAudio = new Audio("/body-spin.mp3");
   let winAudio = new Audio("/applouse.mp3");
+  let loseAudio = new Audio("/ooh.mp3");
   useEffect(() => {
     let data = localStorage.getItem("data");
     let json: any = JSON.parse(data || "[]");
     json = json?.map((item: any) => {
       return {
         option: item?.option,
-        style: item?.style,
+        weight: Number(item?.weight),
+        stock: Number(item?.stock),
+        style: item?.stock > 0 ? null : item?.style
       };
     });
     if (json?.length > 0) {
@@ -73,45 +71,60 @@ const WheelPage = () => {
   }, [data?.length === 0]);
 
   useEffect(() => {
+    let tipe = localStorage.getItem("tipe");
+    setTipe(JSON.parse(tipe || "1"));
     let clik = localStorage.getItem("click");
     setClick(JSON.parse(clik || "0"));
-  }, []);
+  }, [open]);
 
   const router = useRouter();
 
   let totalWeight = data.reduce(
-    (acc: any, option: any) => acc + option.weight,
+    (acc: any, option: any) => acc + option?.weight,
     0
   );
+  const maxWeightOption = data.reduce((max: any, option:any) => {
+    return option.weight > max.weight ? option : max;
+  }, data[0]);
+  const handleSetFlag = () => {
+    setFlag(true);
+  }
+  
   const handleSpinClick = () => {
     spinAudio.play();
-    localStorage.setItem("click", JSON.stringify(click + 1));
     setOpen(false);
     if (!mustSpin) {
       const pickRandomOption = () => {
         let random = Math.random() * totalWeight;
         let median = totalWeight / 2;
-        console.log(median);
-        console.log(random < median);
         if (random < median) {
           random = median + Math.random() * (totalWeight - median - 1);
         }
         let adjustedRandom = random;
-        const sortedData = [...data].sort((a, b) => b.weight - a.weight); // Urutkan berdasarkan bobot terbesar ke terkecil
+        const sortedData = [...data].sort((a, b) => b?.weight - a?.weight); // Urutkan berdasarkan bobot terbesar ke terkecil
         for (let i = 0; i < sortedData.length; i++) {
-          adjustedRandom -= sortedData[i].weight;
-          if (adjustedRandom < 0) {
-            // kurangin stock dulu
-            sortedData[i].stock = sortedData[i].stock - 1;
-
-            return sortedData[i].option; // Mengembalikan opsi yang dipilih
-          }
+          // if (sortedData[i].option !== maxWeightOption.option) {
+            adjustedRandom -= sortedData[i]?.weight;
+            if (adjustedRandom < 0) {
+              if(flag){
+                return maxWeightOption.option
+              }
+              if((sortedData[i].option !== maxWeightOption.option) && click > 30){
+                return maxWeightOption.option
+              }else if(sortedData[i].option !== maxWeightOption.option){
+                return sortedData[i].option
+              }else {
+                return maxWeightOption[sortedData.length - 1];
+              }
+            }
+          // }
         }
       };
 
       const newPrize = pickRandomOption();
       let findIndex = data.findIndex((item: any) => item.option === newPrize);
-      setPrizeNumber(findIndex + 1);
+     
+      setPrizeNumber(findIndex);
       setMustSpin(true);
     }
   };
@@ -119,14 +132,16 @@ const WheelPage = () => {
   const renderModal = () => {
     return (
       <Modal
-        className="text-center flex flex-col justify-center items-center bg-[#E0202A]"
+        className="text-center flex flex-col justify-center items-center "
         open={open}
+        closeIcon={null}
         onOk={() => {
           setOpen(false);
         }}
         onCancel={() => {
           setOpen(false);
         }}
+        footer={null}
       >
         <Image src="/logo.png" width={200} height={200} alt="confetti" />
         <Typography.Title
@@ -134,27 +149,39 @@ const WheelPage = () => {
           className="text-[10vw] text-white"
           style={{ fontSize: "5vw", color: "white" }}
         >
-          Selamat Kamu Mendapat
+          {data[prizeNumber]?.stock < 0 ? "MAAF" : "Selamat Kamu Mendapat"}
         </Typography.Title>
-          
+
         <Typography.Title
           level={2}
+          style={{
+            fontSize: "5vw",
+            color: "white",
+            fontStyle: "italic",
+            fontWeight: "bold",
+          }}
+        >
+          {data[prizeNumber]?.stock < 0
+            ? "Hadiah Habis"
+            : data[prizeNumber]?.option}
+        </Typography.Title>
+        <Typography.Paragraph
+          className="text-[10vw] drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.3)] box-shadow-2xl space-x-3 text-white"
           style={{ fontSize: "5vw", color: "white" }}
         >
-          {data[prizeNumber]?.option}
-        </Typography.Title>
-        <Typography.Title
-          level={3}
-          className="text-[10vw]"
-          style={{ fontSize: "5vw", color: "#E0202A" }}
-        >
           Terimakasih Sobat Pertamina
-        </Typography.Title>
+        </Typography.Paragraph>
       </Modal>
     );
   };
+
+
+  useEffect(() => {
+    if (open) {
+      localStorage.setItem("data", JSON.stringify(data));
+    }
+  }, [open]);
   const handleSetting = () => {
-    // jika sudah dua kali dalam 3 detik maka route ke setting
     let count = 0;
     const interval = setInterval(() => {
       count++;
@@ -164,6 +191,7 @@ const WheelPage = () => {
       }
     }, 3000);
   };
+let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22C"];
 
   return (
     <ConfigProvider>
@@ -176,9 +204,12 @@ const WheelPage = () => {
           >
             Setting
           </button>
-          {/* <StarFilled 
-            className="absolute top-[38%] right-[40%] transform -translate-x-1/2 -translate-y-1/2 z-[99999999999999999]  text-[10vw]  "
-          /> */}
+          {!flag  &&(
+            
+          <button className="absolute bottom-[22%] right-[36%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[5vw] h-[5vw] text-[6vw]  border-0 bg-white bg-[transparent] text-[transparent]" onClick={() => handleSetFlag()}>
+            flag
+          </button>
+          )}
           <div className="absolute top-[37%] right-[45.5%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[5vw] h-[5vw] text-[10vw]  border-0 bg-white rounded-full z-[999] drop-shadow-[0_35px_35px_rgba(0,0,0,1)]" />
           <div className="absolute top-[37.5%] left-[49.5%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[76vw] h-[76vw] text-[6vw]  border-0 bg-transparent text-[transparent] z-50 rounded-full bg-white drop-shadow-[0_35px_35px_rgba(0,0,0,1)]" />
           <div className="absolute top-[22%] right-[53%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[25vw] h-[25vw] text-[6vw]  border-0 bg-transparent text-[transparent]">
@@ -195,12 +226,53 @@ const WheelPage = () => {
                 radiusLineColor="#FFFFFF"
                 radiusLineWidth={0}
                 textDistance={55}
+                backgroundColors={backgroundColor}
+                textColors={["#FFFFFF", "#FFFFFF"]}
                 pointerProps={{ src: "/image/roulette-pointer.png" }}
                 disableInitialAnimation={true}
                 onStopSpinning={() => {
                   setOpen(true);
                   setMustSpin(false);
-                  winAudio.play();
+                  setFlag(false);
+                  localStorage.setItem("click", JSON.stringify(Number(click) + 1));
+
+                  setData(
+                    data.map((item: any, index: number) => {
+                      if (index === prizeNumber) {
+                        if (item.stock > 1) {
+                          winAudio.play();
+
+                          return {
+                            ...item,
+                            stock: item.stock - 1,
+                          };
+                        } else if (item.stock === 1) {
+                          winAudio.play();
+                          return {
+                            ...item,
+                            stock: 0,
+                            style: {
+                              backgroundColor: "#A0A0A0",
+                            },
+                          };
+                        } else if (item.stock === 0) {
+                          loseAudio.play();
+                          return {
+                            ...item,
+                            stock: item.stock - 1,
+                            style: {
+                              backgroundColor: "#A0A0A0",
+                            },
+                          };
+                        } else {
+                          loseAudio.play();
+                          return item;
+                        }
+                      } else {
+                        return item;
+                      }
+                    })
+                  );
                 }}
               />
             )}
