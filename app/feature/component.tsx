@@ -206,7 +206,7 @@ let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22
           </button>
           {!flag  &&(
             
-          <button className="absolute bottom-[22%] right-[36%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[5vw] h-[5vw] text-[6vw]  border-0 bg-white bg-transparent text-[transparent]" onClick={() => handleSetFlag()}>
+          <button className="absolute bottom-[22%] right-[36%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[5vw] h-[5vw] text-[6vw]  border-0  bg-transparent text-[transparent]" onClick={() => handleSetFlag()}>
             flag
           </button>
           )}
