@@ -9,7 +9,6 @@ import {
   Typography,
   
 } from "antd";
-import "react-color-palette/css";
 import { useRouter } from "next/navigation";
 
 const SettingPage = () => {

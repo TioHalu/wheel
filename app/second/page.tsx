@@ -6,16 +6,21 @@ import { useRouter } from "next/navigation";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
+const WheelComponent = dynamic(() => import("../feature/component2"), {
+  ssr: false,
+})
 const WheelPage = () => {
   const { width, height } = useWindowSize();
   const [mustSpin, setMustSpin] = useState(false);
-  const [prizeNumber, setPrizeNumber] = useState(0);
+  const [prizeNumber, setPrizeNumber] = useState("");
   const [click, setClick] = useState(0);
   const [open, setOpen] = useState(false);
   const [tipe, setTipe] = useState<any>("1");
   const [flag, setFlag] = useState<any>(false);
-  
+  const [loading, setLoading] = useState<any>(false);
+  const [reset,setReset] = useState<any>(false)
   
   const [data, setData] = useState<any>([
     {
@@ -99,7 +104,7 @@ const WheelPage = () => {
     },
   ]);
 
-  let spinAudio = new Audio("/body-spin.mp3");
+  let spinAudio = new Audio("/spin-sound.mp3");
   let winAudio = new Audio("/applouse.mp3");
   let loseAudio = new Audio("/ooh.mp3");
   useEffect(() => {
@@ -170,14 +175,14 @@ const WheelPage = () => {
       };
 
       const newPrize = pickRandomOption();
-      let findIndex = data.findIndex((item: any) => item.option === newPrize);
-     
-      setPrizeNumber(findIndex);
+      setPrizeNumber(newPrize);
       setMustSpin(true);
     }
   };
 
   const renderModal = () => {
+    let findName = data?.find((item: any) => item?.option === prizeNumber);
+    console.log(findName?.option,"sdsd")
     return (
       <Modal
         className="text-center flex flex-col justify-center items-center "
@@ -197,7 +202,7 @@ const WheelPage = () => {
           className="text-[10vw] text-white"
           style={{ fontSize: "5vw", color: "white" }}
         >
-          {data[prizeNumber]?.stock < 0 ? "MAAF" : "Selamat Kamu Mendapat"}
+          {findName?.stock < 0 ? "MAAF" : "Selamat Kamu Mendapat"}
         </Typography.Title>
 
         <Typography.Title
@@ -209,9 +214,9 @@ const WheelPage = () => {
             fontWeight: "bold",
           }}
         >
-          {data[prizeNumber]?.stock < 0
+          {findName?.stock < 0
             ? "Hadiah Habis"
-            : data[prizeNumber]?.option}
+            : findName?.option}
         </Typography.Title>
         <Typography.Paragraph
           className="text-[10vw] drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.3)] box-shadow-2xl space-x-3 text-white"
@@ -239,8 +244,77 @@ const WheelPage = () => {
       }
     }, 3000);
   };
+
 let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22C"];
 
+const segments = [
+    'better luck next time',
+    'won 70',
+    'won 10',
+    'better luck next time',
+    'won 2',
+    'won uber pass',
+    'better luck next time',
+    'won a voucher'
+  ]
+  const segColors = [
+    '#EE4040',
+    '#F0CF50',
+    '#815CD1',
+    '#3DA5E0',
+    '#34A24F',
+    '#F9AA1F',
+    '#EC3F3F',
+    '#FF9000'
+  ]
+  const onFinished = (winner:string)=> {
+    setReset(true)
+    setOpen(true);
+    setMustSpin(false);
+    setFlag(false);
+    localStorage.setItem("click", JSON.stringify(Number(click) + 1));
+
+    setData(
+      data.map((item: any, index: number) => {
+        if (item.option === prizeNumber) {
+          if (item.stock > 1) {
+            winAudio.play();
+
+            return {
+              ...item,
+              stock: item.stock - 1,
+            };
+          } else if (item.stock === 1) {
+            winAudio.play();
+            return {
+              ...item,
+              stock: 0,
+              style: {
+                backgroundColor: "#A0A0A0",
+              },
+            };
+          } else if (item.stock === 0) {
+            loseAudio.play();
+            return {
+              ...item,
+              stock: item.stock - 1,
+              style: {
+                backgroundColor: "#A0A0A0",
+              },
+            };
+          } else {
+            loseAudio.play();
+            return item;
+          }
+        } else {
+          return item;
+        }
+      })
+    );
+    }
+  const handleReset = () => {
+    setReset(false)
+  }
   return (
     <ConfigProvider>
       <App>
@@ -253,84 +327,49 @@ let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22
             Setting
           </button>
           {!flag  &&(
-            
-          <button className="absolute bottom-[22%] right-[36%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[5vw] h-[5vw] text-[6vw]  border-0  bg-transparent text-[transparent]" onClick={() => handleSetFlag()}>
+          <button className="absolute bottom-[21%] right-[34%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[5vw] h-[5vw] text-[6vw]  border-0  bg-transparent text-[transparent]" onClick={() => handleSetFlag()}>
             flag
           </button>
           )}
-          <div className="absolute top-[37%] right-[45.5%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[5vw] h-[5vw] text-[10vw]  border-0 bg-white rounded-full z-[999] drop-shadow-[0_35px_35px_rgba(0,0,0,1)]" />
+           
           <div className="absolute top-[37.5%] left-[49.5%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[76vw] h-[76vw] text-[6vw]  border-0 bg-transparent text-[transparent] z-50 rounded-full bg-white drop-shadow-[0_35px_35px_rgba(0,0,0,1)]" />
-          <div className="absolute top-[22%] right-[53%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[25vw] h-[25vw] text-[6vw]  border-0 bg-transparent text-[transparent]">
-            {data?.length === 0 ? (
+          <div className="absolute top-[21.5%] right-[53%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[25vw] h-[25vw] text-[3vw]  border-0 bg-transparent text-[transparent]">
+            {loading? (
               "Loading..."
             ) : (
-              <Wheel
-                mustStartSpinning={mustSpin}
-                prizeNumber={prizeNumber}
-                data={data}
-                spinDuration={1}
-                outerBorderColor="#FFFFFF"
-                outerBorderWidth={15}
-                radiusLineColor="#FFFFFF"
-                radiusLineWidth={0}
-                textDistance={55}
-                backgroundColors={backgroundColor}
-                textColors={["#FFFFFF", "#FFFFFF"]}
-                pointerProps={{ src: "/image/roulette-pointer.png" }}
-                disableInitialAnimation={true}
-                onStopSpinning={() => {
-                  setOpen(true);
-                  setMustSpin(false);
-                  setFlag(false);
-                  localStorage.setItem("click", JSON.stringify(Number(click) + 1));
-
-                  setData(
-                    data.map((item: any, index: number) => {
-                      if (index === prizeNumber) {
-                        if (item.stock > 1) {
-                          winAudio.play();
-
-                          return {
-                            ...item,
-                            stock: item.stock - 1,
-                          };
-                        } else if (item.stock === 1) {
-                          winAudio.play();
-                          return {
-                            ...item,
-                            stock: 0,
-                            style: {
-                              backgroundColor: "#A0A0A0",
-                            },
-                          };
-                        } else if (item.stock === 0) {
-                          loseAudio.play();
-                          return {
-                            ...item,
-                            stock: item.stock - 1,
-                            style: {
-                              backgroundColor: "#A0A0A0",
-                            },
-                          };
-                        } else {
-                          loseAudio.play();
-                          return item;
-                        }
-                      } else {
-                        return item;
-                      }
-                    })
-                  );
-                }}
+                <WheelComponent
+                isSpinning={mustSpin}
+                options={data}
+                segColors={["#E0202A", "#0F6AA2"]}
+                winningSegment={prizeNumber}
+                onFinished={onFinished}
+                primaryColor='white'
+                reset={reset}
+                contrastColor='white'
+                outlineWidth={20}
+                isOnlyOnce={false}
+                size={1050}
+                upDuration={2100}
+                downDuration={13000}
+                fontFamily='Arial'
               />
             )}
           </div>
-          {!mustSpin && (
+          {(!mustSpin && !reset) && (
             <Button
               className="absolute bottom-[25%] left-[75%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[25vw] h-[10vw] text-[6vw] font-bold rounded-[80px] bg-[#B0C4DE]  text-white  bg-gradient-to-tr from-[#60a1cb] to-[#16416C] border-[0.5vw]"
               onClick={handleSpinClick}
             >
               SPIN
+            </Button>
+          )}
+            {(!mustSpin && reset) && (
+            <Button
+            danger
+              className="absolute bottom-[25%] left-[75%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[25vw] h-[10vw] text-[6vw] font-bold rounded-[80px]  text-white    border-[0.5vw]"
+              onClick={handleReset}
+            >
+              RESET
             </Button>
           )}
         </div>
