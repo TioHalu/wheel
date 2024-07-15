@@ -29,7 +29,7 @@ export default function SettingPage() {
     localStorage.setItem("tipe", JSON.stringify(tipe));
   };
   return (
-    <div className="flex justify-center items-center h-screen  bg-cover bg-[url('/image/bg.jpeg')] bg-no-repeat bg-center bg-fixed bg-scroll relative">
+    <div className="flex justify-center items-center h-screen  bg-cover bg-[url('/image/bg.png')] bg-no-repeat bg-center bg-fixed bg-scroll relative">
       <Button
         type="primary"
         danger

@@ -39,7 +39,7 @@ const SettingPage = () => {
     },2000)
   }
   return (
-    <div className="flex justify-center items-center h-screen  bg-cover bg-[url('/image/bg.jpeg')] bg-no-repeat bg-center bg-fixed bg-scroll relative">
+    <div className="flex justify-center items-center h-screen  bg-cover bg-[url('/image/bg.png')] bg-no-repeat bg-center bg-fixed bg-scroll relative">
       <Button type="primary" danger className="absolute top-[1vh] left-[2vw] w-[20vw] text-[5vw] h-[5vh] rounded-3xl" onClick={() => r.push("/setting")}>
         Kembali
       </Button>
