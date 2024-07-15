@@ -197,7 +197,7 @@ let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22
     <ConfigProvider>
       <App>
         {renderModal()}
-        <div className="w-full h-screen flex flex-col justify-center items-center  bg-cover bg-[url('/image/bg.jpeg')] bg-no-repeat bg-center bg-fixed bg-scroll relative">
+        <div className="w-full h-screen flex flex-col justify-center items-center  bg-cover bg-[url('/image/bg.png')] bg-no-repeat bg-center bg-fixed bg-scroll relative">
           <button
             className="absolute top-[6%] left-[10%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[25vw] h-[25vw] text-[6vw]  border-0 bg-transparent text-[transparent]"
             onClick={() => handleSetting()}
