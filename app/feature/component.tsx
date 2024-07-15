@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import Image from "next/image";
-
+import WheelComponent from "./component2";
 const WheelPage = () => {
   const { width, height } = useWindowSize();
   const [mustSpin, setMustSpin] = useState(false);
@@ -193,6 +193,27 @@ const WheelPage = () => {
   };
 let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22C"];
 
+const segments = [
+  'CASHBACK',
+  'MOTOR',
+  'MANDALIKA',
+  'INGGRIS',
+  'JAKARTA',
+  'MOBIL INOVA',
+]
+const segColors = [
+  '#EE4040',
+  '#F0CF50',
+  '#815CD1',
+  '#3DA5E0',
+  '#34A24F',
+  '#F9AA1F',
+  '#EC3F3F',
+  '#FF9000'
+]
+const onFinished = (winner:any) => {
+  console.log(winner)
+}
   return (
     <ConfigProvider>
       <App>
@@ -210,71 +231,87 @@ let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22
             flag
           </button>
           )}
-          <div className="absolute top-[37%] right-[45.5%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[5vw] h-[5vw] text-[10vw]  border-0 bg-white rounded-full z-[999] drop-shadow-[0_35px_35px_rgba(0,0,0,1)]" />
+          {/* <div className="absolute top-[37%] right-[45.5%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[5vw] h-[5vw] text-[10vw]  border-0 bg-white rounded-full z-[999] drop-shadow-[0_35px_35px_rgba(0,0,0,1)]" /> */}
           <div className="absolute top-[37.5%] left-[49.5%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[76vw] h-[76vw] text-[6vw]  border-0 bg-transparent text-[transparent] z-50 rounded-full bg-white drop-shadow-[0_35px_35px_rgba(0,0,0,1)]" />
-          <div className="absolute top-[22%] right-[53%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[25vw] h-[25vw] text-[6vw]  border-0 bg-transparent text-[transparent]">
+          <div className="absolute top-[19.6%] right-[51.5%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[25vw] h-[25vw] text-[3vw]  border-0 bg-transparent text-[transparent]">
             {data?.length === 0 ? (
               "Loading..."
             ) : (
-              <Wheel
-                mustStartSpinning={mustSpin}
-                prizeNumber={prizeNumber}
-                data={data}
-                spinDuration={1.01}
-                outerBorderColor="#FFFFFF"
-                outerBorderWidth={15}
-                radiusLineColor="#FFFFFF"
-                radiusLineWidth={0}
-                textDistance={55}
-                backgroundColors={backgroundColor}
-                textColors={["#FFFFFF", "#FFFFFF"]}
-                pointerProps={{ src: "/image/roulette-pointer.png" }}
-                disableInitialAnimation={true}
-                onStopSpinning={() => {
-                  setOpen(true);
-                  setMustSpin(false);
-                  setFlag(false);
-                  localStorage.setItem("click", JSON.stringify(Number(click) + 1));
+              <WheelComponent
+              isSpinning={mustSpin}
+              segments={segments}
+              segColors={segColors}
+              winningSegment='MOBIL INOVA'
+              onFinished={(winner) => onFinished(winner)}
+              primaryColor='white'
+              contrastColor='white'
+              isOnlyOnce={false}
+              size={1190}
+              upDuration={1000}
+              downDuration={5000}
+              fontFamily='Arial'
+              outlineWidth={30}
+            />
 
-                  setData(
-                    data.map((item: any, index: number) => {
-                      if (index === prizeNumber) {
-                        if (item.stock > 1) {
-                          winAudio.play();
+              // <Wheel
+              //   mustStartSpinning={mustSpin}
+              //   prizeNumber={prizeNumber}
+              //   data={data}
+              //   spinDuration={1.01}
+              //   outerBorderColor="#FFFFFF"
+              //   outerBorderWidth={15}
+              //   radiusLineColor="#FFFFFF"
+              //   radiusLineWidth={0}
+              //   textDistance={55}
+              //   backgroundColors={backgroundColor}
+              //   textColors={["#FFFFFF", "#FFFFFF"]}
+              //   pointerProps={{ src: "/image/roulette-pointer.png" }}
+              //   disableInitialAnimation={true}
+              //   onStopSpinning={() => {
+              //     setOpen(true);
+              //     setMustSpin(false);
+              //     setFlag(false);
+              //     localStorage.setItem("click", JSON.stringify(Number(click) + 1));
 
-                          return {
-                            ...item,
-                            stock: item.stock - 1,
-                          };
-                        } else if (item.stock === 1) {
-                          winAudio.play();
-                          return {
-                            ...item,
-                            stock: 0,
-                            style: {
-                              backgroundColor: "#A0A0A0",
-                            },
-                          };
-                        } else if (item.stock === 0) {
-                          loseAudio.play();
-                          return {
-                            ...item,
-                            stock: item.stock - 1,
-                            style: {
-                              backgroundColor: "#A0A0A0",
-                            },
-                          };
-                        } else {
-                          loseAudio.play();
-                          return item;
-                        }
-                      } else {
-                        return item;
-                      }
-                    })
-                  );
-                }}
-              />
+              //     setData(
+              //       data.map((item: any, index: number) => {
+              //         if (index === prizeNumber) {
+              //           if (item.stock > 1) {
+              //             winAudio.play();
+
+              //             return {
+              //               ...item,
+              //               stock: item.stock - 1,
+              //             };
+              //           } else if (item.stock === 1) {
+              //             winAudio.play();
+              //             return {
+              //               ...item,
+              //               stock: 0,
+              //               style: {
+              //                 backgroundColor: "#A0A0A0",
+              //               },
+              //             };
+              //           } else if (item.stock === 0) {
+              //             loseAudio.play();
+              //             return {
+              //               ...item,
+              //               stock: item.stock - 1,
+              //               style: {
+              //                 backgroundColor: "#A0A0A0",
+              //               },
+              //             };
+              //           } else {
+              //             loseAudio.play();
+              //             return item;
+              //           }
+              //         } else {
+              //           return item;
+              //         }
+              //       })
+              //     );
+              //   }}
+              // />
             )}
           </div>
           {!mustSpin && (
