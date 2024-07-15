@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import { Wheel } from "react-custom-roulette";
 import { App, ConfigProvider, Button, Modal, Typography } from "antd";
 import { useRouter } from "next/navigation";
-import useWindowSize from "react-use/lib/useWindowSize";
-import Confetti from "react-confetti";
+// import useWindowSize from "react-use/lib/useWindowSize";
+// import Confetti from "react-confetti";
 import Image from "next/image";
 
 const WheelPage = () => {
-  const { width, height } = useWindowSize();
+  // const { width, height } = useWindowSize();
   const [mustSpin, setMustSpin] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
   const [click, setClick] = useState(0);
@@ -334,7 +334,7 @@ let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22
             </Button>
           )}
         </div>
-        <Confetti width={width} height={height} />
+        {/* <Confetti width={width} height={height} /> */}
       </App>
     </ConfigProvider>
   );
