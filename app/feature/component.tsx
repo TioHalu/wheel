@@ -220,7 +220,7 @@ let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22
                 mustStartSpinning={mustSpin}
                 prizeNumber={prizeNumber}
                 data={data}
-                spinDuration={1.01}
+                spinDuration={0.5}
                 outerBorderColor="#FFFFFF"
                 outerBorderWidth={15}
                 radiusLineColor="#FFFFFF"
