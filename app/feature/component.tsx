@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Wheel } from "@/public/dist/components/Wheel/index";
+import { Wheel } from "react-custom-roulette";
 import { App, ConfigProvider, Button, Modal, Typography } from "antd";
 import { useRouter } from "next/navigation";
 import useWindowSize from "react-use/lib/useWindowSize";
@@ -220,7 +220,7 @@ let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22
                 mustStartSpinning={mustSpin}
                 prizeNumber={prizeNumber}
                 data={data}
-                spinDuration={1}
+                spinDuration={1.01}
                 outerBorderColor="#FFFFFF"
                 outerBorderWidth={15}
                 radiusLineColor="#FFFFFF"
