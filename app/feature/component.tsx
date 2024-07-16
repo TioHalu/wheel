@@ -137,6 +137,7 @@ const WheelPage = () => {
   const handleSetFlag = () => {
     setFlag(true);
   }
+  const sortedData = [...data].sort((a, b) => b?.weight - a?.weight); 
   
   const handleSpinClick = () => {
     spinAudio.play();
@@ -148,12 +149,13 @@ const WheelPage = () => {
         if (random < median) {
           random = median + Math.random() * (totalWeight - median - 1);
         }
-        let adjustedRandom = random;
-        const sortedData = [...data].sort((a, b) => b?.weight - a?.weight); // Urutkan berdasarkan bobot terbesar ke terkecil
+        let adjustedRandom = 1;
         for (let i = 0; i < sortedData.length; i++) {
-          // if (sortedData[i].option !== maxWeightOption.option) {
             adjustedRandom -= sortedData[i]?.weight;
             if (adjustedRandom < 0) {
+              if((maxWeightOption.option === sortedData[i].option) && sortedData[i].stock <=0 ){
+                return sortedData[sortedData.length - 2].option;
+              }
               if(flag){
                 return maxWeightOption.option
               }
@@ -162,16 +164,18 @@ const WheelPage = () => {
               }else if(sortedData[i].option !== maxWeightOption.option){
                 return sortedData[i].option
               }else {
-                return maxWeightOption[sortedData.length - 1];
+                return sortedData[sortedData.length - 1].option;
               }
             }
-          // }
         }
       };
 
       const newPrize = pickRandomOption();
       let findIndex = data.findIndex((item: any) => item.option === newPrize);
-     
+      
+      if(findIndex === -1){
+        setPrizeNumber(2);
+      }
       setPrizeNumber(findIndex);
       setMustSpin(true);
     }
