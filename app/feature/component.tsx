@@ -111,6 +111,7 @@ const WheelPage = () => {
   const maxWeightOption = data.reduce((max: any, option:any) => {
     return option.weight > max.weight ? option : max;
   }, data[0]);
+  console.log(flag)
   const handleSetFlag = () => {
     setFlag(true);
   }
@@ -130,24 +131,30 @@ const WheelPage = () => {
         for (let i = 0; i < sortedData.length; i++) {
             adjustedRandom -= sortedData[i]?.weight;
             if (adjustedRandom < 0) {
-              if((maxWeightOption.option === sortedData[i].option) && sortedData[i].stock <=0 ){
+              console.log(sortedData[i].option,sortedData[i].stock, maxWeightOption.option , sortedData[i].option ,"real")
+              if((maxWeightOption.option === sortedData[i].option) && maxWeightOption.stock <=0 && click > 30){
+               console.log("masuk1")
                 return sortedData[sortedData.length - 2].option;
               }
-              if(flag){
+              if(flag && maxWeightOption.stock > 0){
                 return maxWeightOption.option
               }
-              if((sortedData[i].option !== maxWeightOption.option) && click > 30){
-                return maxWeightOption.option
+              if((sortedData[i].option === maxWeightOption.option) && click < 30){
+                console.log("masuk2")
+                return sortedData[sortedData.length - (Math.floor(Math.random() * (sortedData.length/2))+1)].option
               }else if(sortedData[i].option !== maxWeightOption.option){
+                console.log("masuk3")
                 return sortedData[i].option
-              }else {
-                return sortedData[sortedData.length - 1].option;
+              } else {
+                console.log("masuk4")
+                return sortedData[i].option;
               }
             }
         }
       };
 
       const newPrize = pickRandomOption();
+      console.log(newPrize,'output')
       let findIndex = data.findIndex((item: any) => item.option === newPrize);
       
       if(findIndex === -1){
