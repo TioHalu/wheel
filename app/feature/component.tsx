@@ -123,11 +123,9 @@ const WheelPage = () => {
     if (!mustSpin) {
       const pickRandomOption = () => {
         let random = Math.random() * totalWeight;
-        let median = totalWeight / 2;
-        if (random < median) {
-          random = median + Math.random() * (totalWeight - median - 1);
-        }
-        let adjustedRandom = random;
+        console.log(random)
+        
+        let adjustedRandom = random
         for (let i = 0; i < sortedData.length; i++) {
             adjustedRandom -= sortedData[i]?.weight;
             if (adjustedRandom < 0) {
@@ -142,7 +140,7 @@ const WheelPage = () => {
               if((sortedData[i].option === maxWeightOption.option) && click < 30){
                 console.log("masuk2")
                 return sortedData[sortedData.length - (Math.floor(Math.random() * (sortedData.length/2))+1)].option
-              }else if(sortedData[i].option !== maxWeightOption.option){
+              } else if(sortedData[i].option !== maxWeightOption.option){
                 console.log("masuk3")
                 return sortedData[i].option
               } else {
