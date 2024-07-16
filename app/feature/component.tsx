@@ -20,7 +20,7 @@ const WheelPage = () => {
   const [data, setData] = useState<any>([
     {
       option: "MOBIL INOVA",
-      weight: 30,
+      weight: 10,
       stock: 1,
     },
     {
@@ -35,68 +35,45 @@ const WheelPage = () => {
     },
     {
       option: "INGGRIS",
-      weight: 50,
+      weight: 30,
       stock: 1,
     },
     {
       option: "JEPANG",
-      weight: 90,
+      weight: 40,
       stock: 1,
     },
     {
       option: "SPANYOL",
-      weight: 10,
+      weight: 50,
       stock: 1,
       style:null
     },
     {
       option: "ITALIA",
-      weight: 10,
+      weight: 60,
       stock: 1,
       style:null
     },
     {
       option: "KOREA",
-      weight: 10,
+      weight: 70,
       stock: 1,
       style:null
     },
     {
       option: "JAPAN",
-      weight: 10,
+      weight: 80,
       stock: 1,
       style:null
     },
     {
       option: "TURKI",
-      weight: 10,
+      weight: 90,
       stock: 1,
       style:null
     },
-    {
-      option: "RUSSIA",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "CHINA",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "THAILAND",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "INDONESIA",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
+   
   ]);
 
   let spinAudio = new Audio("/body-spin.mp3");
@@ -149,7 +126,7 @@ const WheelPage = () => {
         if (random < median) {
           random = median + Math.random() * (totalWeight - median - 1);
         }
-        let adjustedRandom = 1;
+        let adjustedRandom = random;
         for (let i = 0; i < sortedData.length; i++) {
             adjustedRandom -= sortedData[i]?.weight;
             if (adjustedRandom < 0) {

@@ -54,54 +54,7 @@ const WheelPage = () => {
       stock: 1,
       style:null
     },
-    {
-      option: "ITALIA",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "KOREA",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "JAPAN",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "TURKI",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "RUSSIA",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "CHINA",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "THAILAND",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "INDONESIA",
-      weight: 10,
-      stock: 1,
-      style:null
-    },
+    
   ]);
 
   let spinAudio = new Audio("/spin-sound.mp3");
@@ -142,7 +95,7 @@ const WheelPage = () => {
   const handleSetFlag = () => {
     setFlag(true);
   }
-  
+  const sortedData = [...data].sort((a, b) => b?.weight - a?.weight); 
   const handleSpinClick = () => {
     spinAudio.play();
     setOpen(false);
@@ -154,11 +107,14 @@ const WheelPage = () => {
           random = median + Math.random() * (totalWeight - median - 1);
         }
         let adjustedRandom = random;
-        const sortedData = [...data].sort((a, b) => b?.weight - a?.weight); // Urutkan berdasarkan bobot terbesar ke terkecil
+       // Urutkan berdasarkan bobot terbesar ke terkecil
         for (let i = 0; i < sortedData.length; i++) {
           // if (sortedData[i].option !== maxWeightOption.option) {
             adjustedRandom -= sortedData[i]?.weight;
             if (adjustedRandom < 0) {
+              if((maxWeightOption.option === sortedData[i].option) && sortedData[i].stock <=0 ){
+                return sortedData[sortedData.length - 2].option;
+              }
               if(flag){
                 return maxWeightOption.option
               }
@@ -167,7 +123,7 @@ const WheelPage = () => {
               }else if(sortedData[i].option !== maxWeightOption.option){
                 return sortedData[i].option
               }else {
-                return maxWeightOption[sortedData.length - 1];
+                return sortedData[sortedData.length - 1];
               }
             }
           // }
