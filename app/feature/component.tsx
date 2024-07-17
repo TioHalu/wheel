@@ -111,7 +111,6 @@ const WheelPage = () => {
   const maxWeightOption = data.reduce((max: any, option:any) => {
     return option.weight > max.weight ? option : max;
   }, data[0]);
-  console.log(flag)
   const handleSetFlag = () => {
     setFlag(true);
   }

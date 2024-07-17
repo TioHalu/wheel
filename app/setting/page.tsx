@@ -1,5 +1,5 @@
 "use client";
-import { List, Button, Empty } from "antd";
+import { List, Button, Empty, Card } from "antd";
 import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
@@ -8,6 +8,7 @@ export default function SettingPage() {
   const router = useRouter();
   const [data, setData] = useState<any>([]);
   const [tipe, setTipe] = useState<any>(1);
+  const [click, setClick] = useState<any>(0);
   useEffect(() => {
     let data = localStorage.getItem("data");
     setData(JSON.parse(data || "[]"));
@@ -16,7 +17,9 @@ export default function SettingPage() {
   useEffect(() => {
     let tipe = localStorage.getItem("tipe");
     setTipe(JSON.parse(tipe || "1"));
-  }, []);
+    let click = localStorage.getItem("click");
+    setClick(JSON.parse(click || "0"));
+  }, [tipe]);
   const handleRemove = (option: string) => {
     let data = localStorage.getItem("data");
     let json: any = JSON.parse(data || "[]");
@@ -28,6 +31,10 @@ export default function SettingPage() {
     setTipe(tipe);
     localStorage.setItem("tipe", JSON.stringify(tipe));
   };
+  const handleReset = () => {
+    setClick(0);
+    localStorage.setItem("click", JSON.stringify(0));
+  }
   return (
     <div className="flex justify-center items-center h-screen  bg-cover bg-[url('/image/bg.png')] bg-no-repeat bg-center bg-fixed bg-scroll relative">
       <Button
@@ -45,6 +52,17 @@ export default function SettingPage() {
       >
         Wheel
       </Button>
+      <Button
+        type="primary"
+        danger
+        className="absolute top-[9vh] right-[50%] w-[20vw] text-[5vw] h-[5vh] rounded-3xl"
+        onClick={handleReset}
+      >
+        Reset
+      </Button>
+      <div className="absolute top-[8.5vh] right-[10%] p-[2vw] text-[5vw]  rounded-3xl bg-white text-[black]">
+        total spin:{click}
+      </div>
       <Button
         type={tipe === 1 ? "primary" : "default"}
         // danger
