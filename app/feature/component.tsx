@@ -130,14 +130,14 @@ const WheelPage = () => {
             adjustedRandom -= sortedData[i]?.weight;
             if (adjustedRandom < 0) {
               console.log(sortedData[i].option,sortedData[i].stock, maxWeightOption.option , sortedData[i].option ,"real")
-              if((maxWeightOption.option === sortedData[i].option) && maxWeightOption.stock <=0 && click > 30){
+              if((maxWeightOption.option === sortedData[i].option) && maxWeightOption.stock <=0 && click > 1000){
                console.log("masuk1")
                 return sortedData[sortedData.length - 2].option;
               }
               if(flag && maxWeightOption.stock > 0){
                 return maxWeightOption.option
               }
-              if((sortedData[i].option === maxWeightOption.option) && click < 30){
+              if((sortedData[i].option === maxWeightOption.option) && click < 1000){
                 console.log("masuk2")
                 return sortedData[sortedData.length - (Math.floor(Math.random() * (sortedData.length/2))+1)].option
               } else if(sortedData[i].option !== maxWeightOption.option){
@@ -246,7 +246,7 @@ let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22
           )}
           <div className="absolute top-[37%] right-[45.5%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[5vw] h-[5vw] text-[10vw]  border-0 bg-white rounded-full z-[999] drop-shadow-[0_35px_35px_rgba(0,0,0,1)]" />
           <div className="absolute top-[37.5%] left-[49.5%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[76vw] h-[76vw] text-[6vw]  border-0 bg-transparent text-[transparent] z-50 rounded-full bg-white drop-shadow-[0_35px_35px_rgba(0,0,0,1)]" />
-          <div className="absolute top-[22%] right-[53%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[25vw] h-[25vw] text-[6vw]  border-0 bg-transparent text-[transparent]">
+          <div className="absolute top-[22%] right-[53%] transform -translate-x-1/2 -translate-y-1/2 z-50 w-[25vw] h-[25vw] text-[4vw]  border-0 bg-transparent text-[transparent]">
             {data?.length === 0 ? (
               "Loading..."
             ) : (
