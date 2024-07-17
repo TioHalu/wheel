@@ -259,6 +259,7 @@ let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22
                 outerBorderWidth={15}
                 radiusLineColor="#FFFFFF"
                 radiusLineWidth={0}
+                fontSize={10}
                 textDistance={55}
                 backgroundColors={backgroundColor}
                 textColors={["#FFFFFF", "#FFFFFF"]}
