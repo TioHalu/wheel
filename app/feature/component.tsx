@@ -19,59 +19,74 @@ const WheelPage = () => {
   
   const [data, setData] = useState<any>([
     {
-      option: "MOBIL INOVA",
-      weight: 10,
-      stock: 1,
-    },
-    {
-      option: "MOTOR",
-      weight: 20,
-      stock: 1,
-    },
-    {
-      option: "MANDALIKA",
-      weight: 100,
-      stock: 1,
-    },
-    {
-      option: "INGGRIS",
+      option: "Mug Silicon",
       weight: 30,
-      stock: 1,
+      stock: 50,
     },
     {
-      option: "JEPANG",
-      weight: 40,
-      stock: 1,
-    },
-    {
-      option: "SPANYOL",
-      weight: 50,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "ITALIA",
-      weight: 60,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "KOREA",
-      weight: 70,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "JAPAN",
-      weight: 80,
-      stock: 1,
-      style:null
-    },
-    {
-      option: "TURKI",
+      option: "E-Voucher @50K",
       weight: 90,
+      stock: 5,
+    },
+    {
+      option: "Stiker",
+      weight: 70,
+      stock: 20,
+    },
+    {
+      option: "Ticker MotoGP",
+      weight: 100000,
       stock: 1,
-      style:null
+    },
+    {
+      option: "Tshirt Fastron",
+      weight: 180,
+      stock: 10,
+    },
+    {
+      option: "Diffuser",
+      weight: 250,
+      stock: 2,
+    },
+    {
+      option: "E-Voucher @100K",
+      weight: 500,
+      stock: 2,
+    },
+    {
+      option: "Payung",
+      weight: 700,
+      stock: 10,
+    },
+    {
+      option: "Mini Fan",
+      weight: 120,
+      stock: 50,
+    },
+    {
+      option: "Keychain",
+      weight: 60,
+      stock: 30,
+    },
+    {
+      option: "Tshirt MotoGP",
+      weight: 550,
+      stock: 50,
+    },
+    {
+      option: "Goodie Bag Fastron",
+      weight: 400,
+      stock: 10,
+    },
+    {
+      option: "Tshirt MotoGp",
+      weight: 600,
+      stock: 20,
+    },
+    {
+      option: "Vest",
+      weight: 1000,
+      stock: 1,
     },
    
   ]);
@@ -111,6 +126,9 @@ const WheelPage = () => {
   const maxWeightOption = data.reduce((max: any, option:any) => {
     return option.weight > max.weight ? option : max;
   }, data[0]);
+  let searchStockAvailable =  (data?.filter((item: any) => item?.stock > 0 && item?.option !== maxWeightOption?.option))
+  console.log(searchStockAvailable)
+  
   const handleSetFlag = () => {
     setFlag(true);
   }
@@ -131,20 +149,37 @@ const WheelPage = () => {
               console.log(sortedData[i].option,sortedData[i].stock, maxWeightOption.option , sortedData[i].option ,"real")
               if((maxWeightOption.option === sortedData[i].option) && maxWeightOption.stock <=0 && click > 1000){
                console.log("masuk1")
-                return sortedData[sortedData.length - 2].option;
+                const temp =  sortedData[sortedData.length - 2]
+                if(temp?.stock <= 0){
+                  return searchStockAvailable?.[0]?.option ?? maxWeightOption.option
+                }
+                return temp?.option
               }
               if(flag && maxWeightOption.stock > 0){
                 return maxWeightOption.option
               }
               if((sortedData[i].option === maxWeightOption.option) && click < 1000){
                 console.log("masuk2")
-                return sortedData[sortedData.length - (Math.floor(Math.random() * (sortedData.length/2))+1)].option
+                const temp = sortedData[sortedData.length - (Math.floor(Math.random() * (sortedData.length/2))+1)]
+                console.log(temp)
+                if(temp.stock <= 0){
+                  return searchStockAvailable?.[0]?.option ?? maxWeightOption.option
+                }
+                return temp.option
               } else if(sortedData[i].option !== maxWeightOption.option){
                 console.log("masuk3")
-                return sortedData[i].option
+                const temp = sortedData[i]
+                if(temp.stock <= 0){
+                  return searchStockAvailable?.[0]?.option ?? maxWeightOption.option
+                }
+                return temp?.option
               } else {
-                console.log("masuk4")
-                return sortedData[i].option;
+                const temp = sortedData[i]
+                console.log("masuk 4")
+                if(temp.stock <= 0){
+                  return searchStockAvailable?.[0]?.option ?? maxWeightOption.option
+                }
+                return temp?.option;
               }
             }
         }
@@ -285,18 +320,12 @@ let backgroundColor = tipe == "1" ? ["#E0202A", "#0F6AA2"] : ["#E0202A", "#FFB22
                           return {
                             ...item,
                             stock: 0,
-                            style: {
-                              backgroundColor: "#A0A0A0",
-                            },
                           };
                         } else if (item.stock === 0) {
                           loseAudio.play();
                           return {
                             ...item,
                             stock: item.stock - 1,
-                            style: {
-                              backgroundColor: "#A0A0A0",
-                            },
                           };
                         } else {
                           loseAudio.play();
